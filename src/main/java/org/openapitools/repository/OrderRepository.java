@@ -10,4 +10,5 @@ public class OrderRepository extends HashMapRepository<Order, Long> {
     <S extends Order> Long getEntityId(S order) {
         return order.getId();
     }
+
 }

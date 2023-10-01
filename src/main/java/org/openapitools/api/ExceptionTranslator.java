@@ -26,4 +26,5 @@ public class ExceptionTranslator {
         request.setAttribute("javax.servlet.error.status_code", HttpStatus.BAD_REQUEST.value(), RequestAttributes.SCOPE_REQUEST);
         return errorAttributes.getErrorAttributes(request, false);
     }
+
 }

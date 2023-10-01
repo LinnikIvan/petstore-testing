@@ -21,7 +21,7 @@ public class UserApiDelegateImpl implements UserApiDelegate {
     public UserApiDelegateImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
     private static User createUser(long id, String username, String firstName, String lastName, String email, int userStatus) {
         return new User()
                 .id(id)

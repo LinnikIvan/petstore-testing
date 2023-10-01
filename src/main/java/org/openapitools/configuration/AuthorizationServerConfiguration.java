@@ -28,4 +28,5 @@ public class AuthorizationServerConfiguration extends OAuth2AuthorizationServerC
         super.configure(endpoints);
         endpoints.pathMapping("/oauth/authorize", "/api/oauth/dialog");
     }
+
 }

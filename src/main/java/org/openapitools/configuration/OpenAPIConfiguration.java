@@ -24,7 +24,7 @@ public class OpenAPIConfiguration {
     public OpenAPI openapi(
             @Value("classpath:/openapi.yaml") Resource openapiResource,
             @Value("${openapi.openAPIPetstore.base-path:/v3}") String apiBasePath) throws IOException {
-        try(InputStream is = openapiResource.getInputStream()) {
+        try (InputStream is = openapiResource.getInputStream()) {
             OpenAPI openAPI = new OpenAPIParser()
                     .readContents(StreamUtils.copyToString(is, Charset.defaultCharset()), null, new ParseOptions())
                     .getOpenAPI();
@@ -35,4 +35,5 @@ public class OpenAPIConfiguration {
             return openAPI;
         }
     }
+
 }

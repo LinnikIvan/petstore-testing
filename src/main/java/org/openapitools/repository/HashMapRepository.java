@@ -73,7 +73,7 @@ public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> 
     @Override
     public boolean existsById(ID id) {
         Assert.notNull(id, "Id cannot be null");
-        return entities.keySet().contains(id);
+        return entities.containsKey(id);
     }
 
     public T findOne(ID id) {
@@ -85,4 +85,5 @@ public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> 
     public Optional<T> findById(ID id) {
         return Optional.ofNullable(findOne(id));
     }
+
 }

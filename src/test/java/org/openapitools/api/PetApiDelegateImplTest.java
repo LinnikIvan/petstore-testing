@@ -28,9 +28,10 @@ public class PetApiDelegateImplTest {
         Pet pet = new Pet();
         when(petRepository.save(any())).thenReturn(pet);
 
-        ResponseEntity<Void> response = petApiDelegate.addPet(pet);
+        ResponseEntity<Void> actualResponse = petApiDelegate.addPet(pet);
 
-        assertThat(response, is(ResponseEntity.ok().build()));
+        ResponseEntity<Object> expected = ResponseEntity.ok().build();
+        assertThat(actualResponse, is(expected));
     }
 
 }
