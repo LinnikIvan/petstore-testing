@@ -2,12 +2,13 @@
 Feature: Test pet API
 
   Background:
-    * def appUrl = "http://localhost:8088"
-    * def PATH = "/v3/pet/findByStatus"
+    Given url "http://localhost:8088/v3"
 
   Scenario: 1- Get by status
-    Given url appUrl
-    And path PATH
+    Given path "/pet/findByStatus"
     And param status = "available"
     When method GET
     Then status 200
+    * print response
+    * def xml = read('files/find.xml')
+    * match response == xml
