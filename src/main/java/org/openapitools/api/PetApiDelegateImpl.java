@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class PetApiDelegateImpl implements PetApiDelegate {
 
     private final PetRepository petRepository;
-
     private final NativeWebRequest request;
 
     public PetApiDelegateImpl(PetRepository petRepository, NativeWebRequest request) {
@@ -63,29 +62,29 @@ public class PetApiDelegateImpl implements PetApiDelegate {
         Category rabbits = new Category().id(3L).name("Rabbits");
         Category lions = new Category().id(4L).name("Lions");
 
-        petRepository.save(createPet(1, cats, "Cat 1", new String[] {
-                "url1", "url2" }, new String[] { "tag1", "tag2" }, Pet.StatusEnum.AVAILABLE));
-        petRepository.save(createPet(2, cats, "Cat 2", new String[] {
-                "url1", "url2" }, new String[] { "tag2", "tag3" }, Pet.StatusEnum.AVAILABLE));
-        petRepository.save(createPet(3, cats, "Cat 3", new String[] {
-                "url1", "url2" }, new String[] { "tag3", "tag4" }, Pet.StatusEnum.PENDING));
+        petRepository.save(createPet(1, cats, "Cat 1", new String[]{
+                "url1", "url2"}, new String[]{"tag1", "tag2"}, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(2, cats, "Cat 2", new String[]{
+                "url1", "url2"}, new String[]{"tag2", "tag3"}, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(3, cats, "Cat 3", new String[]{
+                "url1", "url2"}, new String[]{"tag3", "tag4"}, Pet.StatusEnum.PENDING));
 
-        petRepository.save(createPet(4, dogs, "Dog 1", new String[] {
-                "url1", "url2" }, new String[] { "tag1", "tag2" }, Pet.StatusEnum.AVAILABLE));
-        petRepository.save(createPet(5, dogs, "Dog 2", new String[] {
-                "url1", "url2" }, new String[] { "tag2", "tag3" }, Pet.StatusEnum.SOLD));
-        petRepository.save(createPet(6, dogs, "Dog 3", new String[] {
-                "url1", "url2" }, new String[] { "tag3", "tag4" }, Pet.StatusEnum.PENDING));
+        petRepository.save(createPet(4, dogs, "Dog 1", new String[]{
+                "url1", "url2"}, new String[]{"tag1", "tag2"}, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(5, dogs, "Dog 2", new String[]{
+                "url1", "url2"}, new String[]{"tag2", "tag3"}, Pet.StatusEnum.SOLD));
+        petRepository.save(createPet(6, dogs, "Dog 3", new String[]{
+                "url1", "url2"}, new String[]{"tag3", "tag4"}, Pet.StatusEnum.PENDING));
 
-        petRepository.save(createPet(7, lions, "Lion 1", new String[] {
-                "url1", "url2" }, new String[] { "tag1", "tag2" }, Pet.StatusEnum.AVAILABLE));
-        petRepository.save(createPet(8, lions, "Lion 2", new String[] {
-                "url1", "url2" }, new String[] { "tag2", "tag3" }, Pet.StatusEnum.AVAILABLE));
-        petRepository.save(createPet(9, lions, "Lion 3", new String[] {
-                "url1", "url2" }, new String[] { "tag3", "tag4" }, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(7, lions, "Lion 1", new String[]{
+                "url1", "url2"}, new String[]{"tag1", "tag2"}, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(8, lions, "Lion 2", new String[]{
+                "url1", "url2"}, new String[]{"tag2", "tag3"}, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(9, lions, "Lion 3", new String[]{
+                "url1", "url2"}, new String[]{"tag3", "tag4"}, Pet.StatusEnum.AVAILABLE));
 
-        petRepository.save(createPet(10, rabbits, "Rabbit 1", new String[] {
-                "url1", "url2" }, new String[] { "tag3", "tag4" }, Pet.StatusEnum.AVAILABLE));
+        petRepository.save(createPet(10, rabbits, "Rabbit 1", new String[]{
+                "url1", "url2"}, new String[]{"tag3", "tag4"}, Pet.StatusEnum.AVAILABLE));
     }
 
     @Override
@@ -132,9 +131,9 @@ public class PetApiDelegateImpl implements PetApiDelegate {
     public ResponseEntity<Void> updatePetWithForm(Long petId, String name, String status) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if(!StringUtils.isEmpty(name))
+        if (!StringUtils.isEmpty(name))
             pet.name(name);
-        if(!StringUtils.isEmpty(name))
+        if (!StringUtils.isEmpty(name))
             pet.setStatus(Pet.StatusEnum.fromValue(status));
         return addPet(pet);
     }
@@ -148,8 +147,7 @@ public class PetApiDelegateImpl implements PetApiDelegate {
             String msg = String.format("additionalMetadata: %s\nFile uploaded to %s, %d bytes", additionalMetadata, uploadedFileLocation, (new File(uploadedFileLocation)).length());
             ModelApiResponse output = new ModelApiResponse().code(200).message(msg);
             return ResponseEntity.ok(output);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't upload file", e);
         }
     }

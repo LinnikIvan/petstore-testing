@@ -23,4 +23,5 @@ public class ApiUtil {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing API key!");
         }
     }
+
 }

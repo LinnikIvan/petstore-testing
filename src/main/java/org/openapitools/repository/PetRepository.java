@@ -45,4 +45,5 @@ public class PetRepository extends HashMapRepository<Pet, Long> {
                 )
                 .collect(Collectors.toList());
     }
+
 }

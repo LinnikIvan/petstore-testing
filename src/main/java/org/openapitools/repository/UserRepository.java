@@ -10,4 +10,5 @@ public class UserRepository extends HashMapRepository<User, String> {
     <S extends User> String getEntityId(S user) {
         return user.getUsername();
     }
+
 }

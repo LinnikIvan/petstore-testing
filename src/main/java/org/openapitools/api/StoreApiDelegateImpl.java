@@ -19,9 +19,7 @@ import java.util.stream.Collectors;
 public class StoreApiDelegateImpl implements StoreApiDelegate {
 
     private final OrderRepository orderRepository;
-
     private final PetRepository petRepository;
-
     private final NativeWebRequest request;
 
     public StoreApiDelegateImpl(OrderRepository orderRepository, PetRepository petRepository, NativeWebRequest request) {

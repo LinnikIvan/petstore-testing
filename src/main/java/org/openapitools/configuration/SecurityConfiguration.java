@@ -12,8 +12,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         WebSecurity.IgnoredRequestConfigurer config = web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
-        if("1".equals(System.getenv("DISABLE_OAUTH"))) {
-                config.antMatchers("/**");
+        if ("1".equals(System.getenv("DISABLE_OAUTH"))) {
+            config.antMatchers("/**");
         }
     }
 
