@@ -1,0 +1,198 @@
+Subject: [PATCH] change port, fix dependencies
+---
+Index: Dockerfile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Dockerfile b/Dockerfile
+--- a/Dockerfile	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/Dockerfile	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -6,6 +6,6 @@
+ 
+ COPY target/openapi-petstore-3.0.0.jar /petstore/openapi-petstore.jar
+ 
+-EXPOSE 8080
++EXPOSE 8088
+ 
+ CMD ["java", "-Dopenapi.openAPIPetstore.base-path=${OPENAPI_BASE_PATH}", "-jar", "/petstore/openapi-petstore.jar"]
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/README.md	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -15,14 +15,14 @@
+ ```
+ 
+ You can view the api documentation in swagger-ui by pointing to  
+-http://localhost:8080/
++http://localhost:8088/
+ 
+ ## Docker
+ 
+ To start the server via docker, please run the following commands:
+ ```sh
+ docker pull openapitools/openapi-petstore
+-docker run -d -e OPENAPI_BASE_PATH=/v3 -p 80:8080 openapitools/openapi-petstore
++docker run -d -e OPENAPI_BASE_PATH=/v3 -p 80:8088 openapitools/openapi-petstore
+ ```
+ 
+ Ref: https://hub.docker.com/r/openapitools/openapi-petstore/
+@@ -43,7 +43,7 @@
+ ## Configuration
+ 
+ Spring parameters in application.properties:
+-* Server port : `server.port` (default=8080)
++* Server port : `server.port` (default=8088)
+ * API base path : `openapi.openAPIPetstore.base-path` (default=/v3). In the docker image the base path can also be set with the `OPENAPI_BASE_PATH` environment variable.
+ 
+ Environment variables:
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/pom.xml	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -61,6 +61,7 @@
+             </plugin>
+         </plugins>
+     </build>
++
+     <dependencies>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+@@ -116,5 +117,27 @@
+             <groupId>javax.validation</groupId>
+             <artifactId>validation-api</artifactId>
+         </dependency>
++
++        <dependency>
++            <groupId>com.sun.xml.bind</groupId>
++            <artifactId>jaxb-core</artifactId>
++            <version>2.3.0.1</version>
++        </dependency>
++        <dependency>
++            <groupId>javax.xml.bind</groupId>
++            <artifactId>jaxb-api</artifactId>
++            <version>2.3.1</version>
++        </dependency>
++        <dependency>
++            <groupId>com.sun.xml.bind</groupId>
++            <artifactId>jaxb-impl</artifactId>
++            <version>2.3.1</version>
++        </dependency>
++        <dependency>
++            <groupId>org.javassist</groupId>
++            <artifactId>javassist</artifactId>
++            <version>3.25.0-GA</version>
++        </dependency>
++
+     </dependencies>
+ </project>
+Index: src/main/java/org/openapitools/api/PetApiDelegateImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/openapitools/api/PetApiDelegateImpl.java b/src/main/java/org/openapitools/api/PetApiDelegateImpl.java
+--- a/src/main/java/org/openapitools/api/PetApiDelegateImpl.java	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/java/org/openapitools/api/PetApiDelegateImpl.java	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -67,7 +67,6 @@
+                 "url1", "url2" }, new String[] { "tag3", "tag4" }, Pet.StatusEnum.AVAILABLE));
+     }
+ 
+-
+     @Override
+     public ResponseEntity<Void> addPet(Pet pet) {
+         petRepository.save(pet);
+Index: src/main/java/org/openapitools/api/StoreApiDelegateImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/openapitools/api/StoreApiDelegateImpl.java b/src/main/java/org/openapitools/api/StoreApiDelegateImpl.java
+--- a/src/main/java/org/openapitools/api/StoreApiDelegateImpl.java	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/java/org/openapitools/api/StoreApiDelegateImpl.java	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -44,7 +44,6 @@
+         orderRepository.save(createOrder(10, 3, Order.StatusEnum.PLACED));
+     }
+ 
+-
+     @Override
+     public ResponseEntity<Void> deleteOrder(String orderId) {
+         Order order = orderRepository.findById(Long.valueOf(orderId))
+@@ -81,4 +80,5 @@
+                 .shipDate(OffsetDateTime.now())
+                 .status(status);
+     }
++
+ }
+Index: src/main/java/org/openapitools/api/UserApiDelegateImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/openapitools/api/UserApiDelegateImpl.java b/src/main/java/org/openapitools/api/UserApiDelegateImpl.java
+--- a/src/main/java/org/openapitools/api/UserApiDelegateImpl.java	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/java/org/openapitools/api/UserApiDelegateImpl.java	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -111,4 +111,5 @@
+                 .phone("123-456-7890")
+                 .userStatus(userStatus);
+     }
++
+ }
+Index: src/main/java/org/openapitools/configuration/ResourceServerConfiguration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/openapitools/configuration/ResourceServerConfiguration.java b/src/main/java/org/openapitools/configuration/ResourceServerConfiguration.java
+--- a/src/main/java/org/openapitools/configuration/ResourceServerConfiguration.java	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/java/org/openapitools/configuration/ResourceServerConfiguration.java	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -25,6 +25,8 @@
+                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                 .and()
+                 .authorizeRequests()
+-                .anyRequest().access("#oauth2.hasScope('write:pets') and #oauth2.hasScope('read:pets')");
++                .anyRequest()
++                .access("#oauth2.hasScope('write:pets') and #oauth2.hasScope('read:pets')");
+     }
+-}
+\ No newline at end of file
++
++}
+Index: src/main/java/org/openapitools/configuration/SecurityConfiguration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/openapitools/configuration/SecurityConfiguration.java b/src/main/java/org/openapitools/configuration/SecurityConfiguration.java
+--- a/src/main/java/org/openapitools/configuration/SecurityConfiguration.java	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/java/org/openapitools/configuration/SecurityConfiguration.java	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -27,4 +27,5 @@
+                 .and()
+                 .formLogin().permitAll();
+     }
+-}
+\ No newline at end of file
++
++}
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision ab2041ccdf5a8d140d5e1005d472848e847802d0)
++++ b/src/main/resources/application.properties	(revision dbe2647f30bccc1eab42904f804d39ed8a398b53)
+@@ -1,4 +1,4 @@
+-server.port=8080
++server.port=8088
+ spring.jackson.date-format=org.openapitools.RFC3339DateFormat
+ spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS=false
+ openapi.openAPIPetstore.base-path=/v3
