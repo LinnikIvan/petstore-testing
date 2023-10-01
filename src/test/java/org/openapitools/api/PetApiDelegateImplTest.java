@@ -38,7 +38,7 @@ public class PetApiDelegateImplTest {
     public void testSaveNullPet() {
         ResponseEntity<Void> actualResponse = petApiDelegate.addPet(null);
 
-        ResponseEntity<Void> expected = ResponseEntity.ok().build();
+        ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
         assertThat(actualResponse, is(expected));
     }
 
