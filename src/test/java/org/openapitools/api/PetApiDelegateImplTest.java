@@ -24,13 +24,21 @@ public class PetApiDelegateImplTest {
     private PetRepository petRepository;
 
     @Test
-    public void name() {
+    public void testSavePetSuccessfully() {
         Pet pet = new Pet();
         when(petRepository.save(any())).thenReturn(pet);
 
         ResponseEntity<Void> actualResponse = petApiDelegate.addPet(pet);
 
-        ResponseEntity<Object> expected = ResponseEntity.ok().build();
+        ResponseEntity<Void> expected = ResponseEntity.ok().build();
+        assertThat(actualResponse, is(expected));
+    }
+
+    @Test
+    public void testSaveNullPet() {
+        ResponseEntity<Void> actualResponse = petApiDelegate.addPet(null);
+
+        ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
         assertThat(actualResponse, is(expected));
     }
 
